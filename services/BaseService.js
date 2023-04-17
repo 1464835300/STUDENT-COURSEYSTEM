@@ -81,16 +81,6 @@ class BaseService extends DBUtils {
         let result = await this.excutSql(strSql, [...ps]);
         return result.length == 0;
     }
-    /**
-     * 注册
-     * @param {loginname, email, pwd,phone,gender,birth,remark,name} param0 
-     * @returns {Promise<Boolean>}  true成功，false失败
-     */
-    async register({ loginname, email, pwd, phone, gender, birth, remark, name }) {
-        pwd = md5(pwd + AppConfig);
-        let strSql = `INSERT INTO course_sysdb.${this.tableMap[this.currentTableName]}(loginname, email, pwd , phone , gender , birth , remark , name) VALUES ( ? , ? , ? , ? , ? , ? , ? , ? );`
-        let result = await this.excutSql(strSql, [loginname, email, pwd, phone, gender, birth, remark, name]);
-        return result.affectedRows > 0;
-    }
+
 };
 module.exports = BaseService

@@ -15,7 +15,6 @@ class StudentInfoService extends BaseService {
      * @param {sno, classno, name, pageIndex, pageSize} param0 参数 
      * @returns 
     */
-    //    SELECT a.*,b.cname FROM t_student a INNER JOIN t_class b ON a.classno = b.classno AND a.isDel = 0 AND b.isDel = 0;
     async getListByPage({ sno, classno, name, pageIndex, pageSize }) {
         let strSql = `SELECT a.*,b.cname FROM t_student a INNER JOIN t_class b ON a.classno = b.classno AND a.isDel = 0 AND b.isDel = 0  `;
         let { strWhere, ps } = this.paramsInit()
@@ -42,6 +41,20 @@ class StudentInfoService extends BaseService {
         let strSql = `SELECT classno,cname FROM course_sysdb.t_class; `
         let result = await this.excutSql(strSql);
         return result
+    }
+    /**
+     * 注册
+     * @param {email, pwd,phone,gender,birth,remark,name} param0 
+     * @returns {Promise<Boolean>}  true成功，false失败
+    */
+    async register({ email, pwd, phone, gender, birth, remark, name }) {
+        pwd = md5(pwd + AppConfig);
+        let snoSql = `SELECT sno FROM t_student ORDER BY sno DESC LIMIT 1;`
+        let lastSno = await this.excutSql(snoSql);
+        console.log(lastSno);
+        let strSql = `INSERT INTO course_sysdb.t_student(loginname, email, pwd , phone , gender , birth , remark , name) VALUES ( ? , ? , ? , ? , ? , ? , ? , ? );`
+        let result = await this.excutSql(strSql, [loginname, email, pwd, phone, gender, birth, remark, name]);
+        return result.affectedRows > 0;
     }
 }
 module.exports = StudentInfoService; 
