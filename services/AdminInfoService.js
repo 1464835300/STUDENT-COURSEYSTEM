@@ -52,5 +52,15 @@ class AdminInfoService extends BaseService {
         let result = await this.excutSql(strSql, [loginname, email, pwd, phone, gender, birth, remark, name]);
         return result.affectedRows > 0;
     }
+    /**
+     * 删除管理员
+     * @param {sno} param0 
+     * @returns {Promise<boolean>} true修改成功，false修改失败
+    */
+    async deleteById({ loginname }) {
+        let strSql = `update course_sysdb.t_admin set isDel = 1 where loginname = ?`;
+        let result = await this.excutSql(strSql, [loginname]);
+        return result.affectedRows > 0;
+    }
 }
 module.exports = AdminInfoService; 

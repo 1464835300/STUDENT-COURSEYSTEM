@@ -31,19 +31,11 @@ router.post("/checkLoginname", async (req, resp) => {
     resp.json(resultJson)
 })
 
-// 新增管理员
-router.post("/register", async (req, resp) => {
-    let result = await ServiceFactory.createAdminInfoService().register(req.body);
-    let resultJson = new ResultJson(true, "注册成功", result)
-    resp.json(resultJson)
-})
-
 // 验证登录
 router.post("/checkLogin", async (req, resp) => {
     let AdminInfoService = ServiceFactory.createAdminInfoService();
     let result = await AdminInfoService.checkLogin(req.body);
     let resultJson = null;
-    console.log(result);
     if (typeof result != "object") {
         if (result === 0) {
             resultJson = new ResultJson(Boolean(result), "账号已被冻结", result);
@@ -71,10 +63,24 @@ router.post("/checkLogin", async (req, resp) => {
     resp.json(resultJson);
 })
 
-// 
+// 激活冻结
 router.post("/freeze", async (req, resp) => {
     let result = await ServiceFactory.createAdminInfoService().onFreeze(req.body);
     let resultJson = new ResultJson(true, "操作成功", result);
+    resp.json(resultJson)
+})
+
+// 新增管理员
+router.post("/register", async (req, resp) => {
+    let result = await ServiceFactory.createAdminInfoService().register(req.body);
+    let resultJson = new ResultJson(true, "注册成功", result)
+    resp.json(resultJson)
+})
+
+// 删除管理员
+router.post("/delete", async (req, resp) => {
+    let result = await ServiceFactory.createAdminInfoService().deleteById(req.body);
+    let resultJson = new ResultJson(true, "删除成功", result);
     resp.json(resultJson)
 })
 

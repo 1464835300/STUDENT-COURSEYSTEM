@@ -18,7 +18,16 @@ class PageResult {
     constructor(pageIndex, totalCount, listData, pageSize) {
         this.pageIndex = pageIndex;
         this.totalCount = totalCount;
-        listData.forEach(item => { Reflect.deleteProperty(item, "isDel"); Reflect.deleteProperty(item, "pwd") })
+        listData.forEach(item => {
+            Reflect.deleteProperty(item, "isDel");
+            Reflect.deleteProperty(item, "pwd");
+            // 统一修改日期格式
+            if (item.birth && item.birth instanceof Date) {
+                item.birth = (item.birth.toJSON()).substring(0, 10);
+            }
+        }
+
+        )
         this.listData = listData;
 
         this.pageCount = Math.ceil(totalCount / pageSize);

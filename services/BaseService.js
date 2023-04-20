@@ -18,16 +18,6 @@ class BaseService extends DBUtils {
             teacherInfo: "t_teacher",
         }
     }
-    /**
-     * 根据id删除一项
-     * @param {number} id 
-     * @returns {Promise<boolean>} true删除成功，false删除失败
-     */
-    async deleteById(id) {
-        let strSql = `update ${this.tableMap[this.currentTableName]} set isDel = 1 where id = ?`;
-        let result = await this.excutSql(strSql, [id]);
-        return result.affectedRows > 0;
-    }
 
     /**
      * 获取所有数据
