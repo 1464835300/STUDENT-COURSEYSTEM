@@ -42,7 +42,7 @@ class AdminInfoService extends BaseService {
         return result.affectedRows > 0;
     }
     /**
-     * 注册
+     * 新增管理员
      * @param {loginname, email, pwd,phone,gender,birth,remark,name} param0 
      * @returns {Promise<Boolean>}  true成功，false失败
     */
@@ -50,6 +50,16 @@ class AdminInfoService extends BaseService {
         pwd = md5(pwd + AppConfig);
         let strSql = `INSERT INTO course_sysdb.t_admin(loginname, email, pwd , phone , gender , birth , remark , name) VALUES ( ? , ? , ? , ? , ? , ? , ? , ? );`
         let result = await this.excutSql(strSql, [loginname, email, pwd, phone, gender, birth, remark, name]);
+        return result.affectedRows > 0;
+    }
+    /**
+     * 修改管理员
+     * @param { loginname, email, phone, gender, birth, remark, name } param0 
+     * @returns {Promise<Boolean>}  true成功，false失败
+     */
+    async update({ loginname, email, phone, gender, birth, remark, name }) {
+        let strSql = ` UPDATE course_sysdb.t_admin SET email = ? , phone = ? , gender = ? , birth = ? , remark = ?, name = ? WHERE loginname = ? `;
+        let result = await this.excutSql(strSql, [email, phone, gender, birth, remark, name ,loginname]);
         return result.affectedRows > 0;
     }
     /**

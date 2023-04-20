@@ -26,7 +26,7 @@ router.post("/getClassList", async (req, resp) => {
     let resultJson = new ResultJson(true, "教室信息获取成功", classInList)
     resp.json(resultJson)
 })
-// 获取教室列表
+// 新增学生
 router.post("/register", async (req, resp) => {
     let StudentInfoService = ServiceFactory.createStudentInfoService();
     let data = await StudentInfoService.register(req.body);
