@@ -15,7 +15,7 @@ class TeacherInfoService extends BaseService {
      * @param {loginname,name, remark, pageIndex = 1, pageSize} param0 
      * @returns 
      */
-    async getListByPage({ loginname,name, remark, pageIndex = 1, pageSize }) {
+    async getListByPage({ loginname, name, remark, pageIndex = 1, pageSize }) {
         let strSql = ` select * from ${this.tableMap[this.currentTableName]}  where isDel = 0  `;
         let { strWhere, ps } = this.paramsInit()
             .like("loginname", loginname)

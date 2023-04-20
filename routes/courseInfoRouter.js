@@ -13,7 +13,7 @@ const ResultJson = require("../model/ResultJson");
 router.post("/getListByPage", async (req, resp) => {
     let CourseInfoService = ServiceFactory.createCourseInfoService();
     let courseList = await CourseInfoService.getListByPage(req.body);
-    let resultJson = new ResultJson(true, "教师信息获取成功", courseList)
+    let resultJson = new ResultJson(true, "课程信息获取成功", courseList)
     resp.json(resultJson)
 })
 
@@ -35,6 +35,13 @@ router.post("/delete", async (req, resp) => {
 router.post("/update", async (req, resp) => {
     let result = await ServiceFactory.createCourseInfoService().update(req.body);
     let resultJson = new ResultJson(result, result ? "修改成功" : "修改失败");
+    resp.json(resultJson);
+})
+
+// 已选课程列表
+router.post("/getSeletedByCourse", async (req, resp) => {
+    let result = await ServiceFactory.createCourseInfoService().getSeletedByCourse(req.body);
+    let resultJson = new ResultJson(true, "选课信息获取成功", courseList)
     resp.json(resultJson);
 })
 

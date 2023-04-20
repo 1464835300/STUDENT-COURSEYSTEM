@@ -17,7 +17,7 @@ class StudentInfoService extends BaseService {
      * @param {sno, classno, name, pageIndex, pageSize} param0 参数 
      * @returns 
     */
-    async getListByPage({ sno, classno, name, pageIndex, pageSize }) {
+    async getListByPage({ sno, classno, name, pageIndex = 1, pageSize }) {
         let strSql = `SELECT a.*,b.cname FROM t_student a INNER JOIN t_class b ON a.classno = b.classno AND a.isDel = 0 AND b.isDel = 0  `;
         let { strWhere, ps } = this.paramsInit()
             .like("a.sno", sno)
