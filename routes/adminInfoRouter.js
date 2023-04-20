@@ -17,9 +17,6 @@ const AppConfig = require("../config/AppConfig");
 router.post("/getListByPage", async (req, resp) => {
     let AdminInfoService = ServiceFactory.createAdminInfoService();
     let adminInfoList = await AdminInfoService.getListByPage(req.body);
-    Reflect.deleteProperty(adminInfoList.listData, "isDel");
-    Reflect.deleteProperty(adminInfoList.listData, "ano");
-    Reflect.deleteProperty(adminInfoList.listData, "pwd");
     let resultJson = new ResultJson(true, "管理员信息获取成功", adminInfoList)
     resp.json(resultJson)
 })
@@ -83,6 +80,14 @@ router.post("/delete", async (req, resp) => {
     let resultJson = new ResultJson(true, "删除成功", result);
     resp.json(resultJson)
 })
+
+// 修改管理员信息
+router.post("/update", async (req, resp) => {
+    let result = await ServiceFactory.createAdminInfoService().update(req.body);
+    let resultJson = new ResultJson(result, result ? "修改成功" : "修改失败");
+    resp.json(resultJson);
+})
+
 
 
 

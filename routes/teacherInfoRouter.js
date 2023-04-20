@@ -9,6 +9,13 @@ const express = require("express");
 const router = express.Router();
 const ServiceFactory = require("../factory/ServiceFactory");
 const ResultJson = require("../model/ResultJson");
+// 获取列表
+router.post("/getListByPage", async (req, resp) => {
+    let TeacherInfoService = ServiceFactory.createTeacherInfoService();
+    let TeacherList = await TeacherInfoService.getListByPage(req.body);
+    let resultJson = new ResultJson(true, "教师信息获取成功", TeacherList)
+    resp.json(resultJson)
+})
 
 // 删除老师
 router.post("/delete", async (req, resp) => {
@@ -24,6 +31,12 @@ router.post("/update", async (req, resp) => {
     resp.json(resultJson);
 })
 
+// 新增老师
+router.post("/register", async (req, resp) => {
+    let result = await ServiceFactory.createTeacherInfoService().register(req.body);
+    let resultJson = new ResultJson(true, "注册成功", result)
+    resp.json(resultJson)
+})
 
 
 module.exports = router;

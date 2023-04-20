@@ -9,7 +9,33 @@ const express = require("express");
 const router = express.Router();
 const ServiceFactory = require("../factory/ServiceFactory");
 const ResultJson = require("../model/ResultJson");
+// 获取列表
+router.post("/getListByPage", async (req, resp) => {
+    let CourseInfoService = ServiceFactory.createCourseInfoService();
+    let courseList = await CourseInfoService.getListByPage(req.body);
+    let resultJson = new ResultJson(true, "教师信息获取成功", courseList)
+    resp.json(resultJson)
+})
 
+// 新增课程
+router.post("/addCourse", async (req, resp) => {
+    let result = await ServiceFactory.createCourseInfoService().addCourse(req.body);
+    let resultJson = new ResultJson(true, "新增成功", result)
+    resp.json(resultJson)
+})
 
+// 删除课程
+router.post("/delete", async (req, resp) => {
+    let result = await ServiceFactory.createCourseInfoService().deleteById(req.body);
+    let resultJson = new ResultJson(true, "删除成功", result);
+    resp.json(resultJson)
+})
+
+// 修改课程信息
+router.post("/update", async (req, resp) => {
+    let result = await ServiceFactory.createCourseInfoService().update(req.body);
+    let resultJson = new ResultJson(result, result ? "修改成功" : "修改失败");
+    resp.json(resultJson);
+})
 
 module.exports = router;

@@ -13,10 +13,8 @@ const ResultJson = require("../model/ResultJson");
 // 获取列表
 router.post("/getListByPage", async (req, resp) => {
     let StudentInfoService = ServiceFactory.createStudentInfoService();
-    let studentInList = await StudentInfoService.getListByPage(req.body);
-    Reflect.deleteProperty(studentInList.listData, "isDel");
-    Reflect.deleteProperty(studentInList.listData, "pwd");
-    let resultJson = new ResultJson(true, "学生信息获取成功", studentInList)
+    let studentList = await StudentInfoService.getListByPage(req.body);
+    let resultJson = new ResultJson(true, "学生信息获取成功", studentList)
     resp.json(resultJson)
 })
 // 获取教室列表
