@@ -54,8 +54,9 @@ router.post("/getSeletedByCourse", async (req, resp) => {
 // 退课
 router.post("/dropCourse", async (req, resp) => {
   console.log(req.body);
-  let result =
-    await ServiceFactory.createCourseInfoService().dropCourse(req.body);
+  let result = await ServiceFactory.createCourseInfoService().dropCourse(
+    req.body
+  );
   let resultJson = new ResultJson(true, "退课成功", result);
   resp.json(resultJson);
 });
