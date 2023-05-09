@@ -1,7 +1,7 @@
-// 抽象工厂模式
+// // 抽象工厂模式
 // const path = require("path");
 // const fs = require("fs");
-// const ServiceFactory = (() => {
+// const ServiceFactory1 = (() => {
 //     let obj = {}
 //     let arr = fs.readdirSync(path.join(__dirname, "../services"));
 //     for (let item of arr) {
@@ -16,10 +16,12 @@
 //     }
 //     return obj;
 // })();
+// console.log(ServiceFactory1);
 
 class ServiceFactory {
     static createAdminInfoService() {
         const AdminInfoService = require("../services/AdminInfoService");
+        console.log(AdminInfoService);
         return new AdminInfoService();
     }
 
@@ -37,11 +39,6 @@ class ServiceFactory {
         const TeacherInfoService = require("../services/TeacherInfoService");
         return new TeacherInfoService();
     }
-
-    // static createDataViewService() {
-    //     const DataViewService = require("../service/DataViewService");
-    //     return new DataViewService();
-    // }
 }
 
 module.exports = ServiceFactory;
