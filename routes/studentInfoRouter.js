@@ -46,5 +46,12 @@ router.post("/delete", async (req, resp) => {
     resp.json(resultJson)
 })
 
+// 可选课程代码
+router.post("/chooseCourseList", async (req, resp) => {
+    let result = await ServiceFactory.createStudentInfoService().getStudentChooseList(req.body);
+    let resultJson = new ResultJson(true, "选课信息获取成功", result)
+    resp.json(resultJson)
+})
+
 
 module.exports = router;

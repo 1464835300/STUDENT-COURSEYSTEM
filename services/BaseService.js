@@ -46,7 +46,9 @@ class BaseService extends DBUtils {
                 break;
         }
         pwd = md5(pwd + AppConfig);
+        console.log(loginname,pwd,type);
         let strSql = `SELECT * FROM ${this.tableMap[type]} WHERE isDel = 0 AND ${this.tableMap[type]}.loginname=?  AND ${this.tableMap[type]}.pwd=?`;
+        console.log(strSql);
         let result = await this.excutSql(strSql, [loginname, pwd]);
         if (result.length > 0 && result[0].isFreeze === 0) {
             if (result[0].isFreeze === 0) {

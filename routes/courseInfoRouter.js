@@ -60,5 +60,14 @@ router.post("/dropCourse", async (req, resp) => {
   let resultJson = new ResultJson(true, "退课成功", result);
   resp.json(resultJson);
 });
+// 选课
+router.post("/chooseCourse", async (req, resp) => {
+  console.log(req.body);
+  let result = await ServiceFactory.createCourseInfoService().chooseCourse(
+    req.body
+  );
+  let resultJson = new ResultJson(true, "选课成功", result);
+  resp.json(resultJson);
+});
 
 module.exports = router;

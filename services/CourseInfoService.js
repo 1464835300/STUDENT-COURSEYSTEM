@@ -17,7 +17,7 @@ class CourseInfoService extends BaseService {
    */
   async getListByPage({ cname, tname, remark, pageIndex = 1, pageSize }) {
     let strSql =
-      "SELECT a.*,b.`name`,b.remark,b.phone FROM t_course a INNER JOIN t_teacher b ON a.tno = b.tno AND a.isDel = 0 AND b.isDel = 0 ";
+      "SELECT a.*,b.`name`,b.remark,b.phone,b.tno FROM t_course a INNER JOIN t_teacher b ON a.tno = b.tno AND a.isDel = 0 AND b.isDel = 0 ";
     let { strWhere, ps } = this.paramsInit()
       .like("a.cname", cname)
       .like("b.name", tname)
@@ -37,7 +37,6 @@ class CourseInfoService extends BaseService {
       let sql = `select count(*) 'totalCount' from t_student_course a INNER JOIN t_course b ON b.cno = a.cno AND b.isDel = 0 AND a.isDel = 0 AND b.cno = ${listData[i].cno}`;
       let res = await this.excutSql(sql);
       listData[i].selectPerson = res[0].totalCount;
-      Reflect.deleteProperty(listData[i], "tno");
       if (listData[i].endDate && listData[i].endDate instanceof Date) {
         listData[i].endDate = listData[i].endDate.toJSON().substring(0, 10);
       }
@@ -76,8 +75,8 @@ class CourseInfoService extends BaseService {
       cname,
       credit,
       startDate,
-      selectMax,
       endDate,
+      selectMax,
       tno,
       cno,
     ]);
@@ -118,17 +117,15 @@ class CourseInfoService extends BaseService {
     pageSize,
   }) {
     let strSql =
-      "SELECT b.*, c.`name` as studentName ,c.sno, d.`name` as teacherName,a.id FROM t_student_course a INNER JOIN t_course b ON a.cno = b.cno INNER JOIN t_student c ON a.sno = c.sno INNER JOIN t_teacher d ON b.tno = d.tno AND a.isDel = 0  AND b.isDel = 0  AND c.isDel = 0";
+      "SELECT b.*, c.`name` as studentName ,c.sno, d.`name` as teacherName,a.id FROM t_student_course a INNER JOIN t_course b ON a.cno = b.cno INNER JOIN t_student c ON a.sno = c.sno INNER JOIN t_teacher d ON b.tno = d.tno AND a.isDel = 0  AND b.isDel = 0  AND c.isDel = 0 ";
     let { strWhere, ps } = this.paramsInit()
       .like("b.cname", cname)
       .like("d.name", tname)
       .like("c.name", sname)
-      .like("c.son", sno);
+      .like("c.sno", sno);
     strSql += strWhere + ` limit ${(pageIndex - 1) * pageSize},${pageSize} ;`;
-    console.log(pageIndex, pageSize);
-    console.log(strSql);
     //第二条sql语句sno, classno, , pageIndex, pageSize
-    let countSql = ` select count(*) 'totalCount' from t_course a INNER JOIN t_teacher b ON  a.tno = b.tno AND b.isDel = 0 AND a.isDel = 0  `;
+    let countSql = ` select count(*) 'totalCount' from t_student_course a INNER JOIN t_course b ON a.cno = b.cno INNER JOIN t_student c ON a.sno = c.sno INNER JOIN t_teacher d ON b.tno = d.tno AND a.isDel = 0  AND b.isDel = 0  AND c.isDel = 0  `;
     countSql += strWhere;
     //现在执行的是2条sql语句，所以result里面就会有2个结果
     let [listData, [{ totalCount }]] = await this.excutSql(strSql + countSql, [
@@ -153,8 +150,7 @@ class CourseInfoService extends BaseService {
    * @returns
    */
   async dropCourse({ id }) {
-    let strSql = `UPDATE course_sysdb.t_student_course SET isDel = 1   `;
-    console.log(id);
+    let strSql = ` UPDATE course_sysdb.t_student_course SET isDel = 1  `;
     let arr = id.split(",");
     arr.forEach((item, index) => {
       if (index === 0) {
@@ -163,9 +159,33 @@ class CourseInfoService extends BaseService {
         strSql += `or id = ${item} `;
       }
     });
-    console.log(strSql);
     let result = await this.excutSql(strSql);
     return result.affectedRows > 0;
+  }
+  /**
+   * 选课
+   * @param {*} param0
+   */
+  async chooseCourse({ ChooseList }) {
+    let sql = "";
+    console.log(ChooseList);
+    let arr = JSON.parse(ChooseList);
+    console.log(ChooseList, arr);
+    arr.forEach((item) => {
+      let strSql = ` INSERT INTO course_sysdb.t_student_course(sno, cno) VALUES ( ${item.sno} ,  ${item.cno} ); `;
+      sql += strSql;
+    });
+    console.log(sql);
+
+    let res = await this.excutSql(sql);
+    let flag = false;
+    if (res instanceof Array) {
+      flag = res.some((item) => item.affectedRows > 0);
+    } else {
+      flag = res.affectedRows > 0;
+    }
+
+    return flag;
   }
 }
 module.exports = CourseInfoService;

@@ -6,6 +6,8 @@
  */
 const BaseService = require("./BaseService")
 const PageResult = require("../model/PageResult");
+const md5 = require("md5");
+const AppConfig = require("../config/AppConfig")
 class TeacherInfoService extends BaseService {
     constructor() {
         super("teacherInfo");
