@@ -26,7 +26,7 @@ class StudentInfoService extends BaseService {
     //第一条sql语句
     strSql += strWhere + ` limit ${(pageIndex - 1) * pageSize},${pageSize} ;`;
     //第二条sql语句sno, classno, name, pageIndex, pageSize
-    let countSql = ` select count(*) 'totalCount' from t_student a INNER JOIN t_class b ON  a.classno = b.classno AND B.isDel = 0 AND a.isDel = 0  `;
+    let countSql = ` select count(*) 'totalCount' from t_student a INNER JOIN t_class b ON  a.classno = b.classno AND b.isDel = 0 AND a.isDel = 0  `;
     countSql += strWhere;
     //现在执行的是2条sql语句，所以result里面就会有2个结果
     let [listData, [{ totalCount }]] = await this.excutSql(strSql + countSql, [
